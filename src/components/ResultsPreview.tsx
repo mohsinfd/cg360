@@ -46,7 +46,6 @@ const ResultsPreview: React.FC<ResultsPreviewProps> = ({
 
   // Calculate gamification metrics
   const progressPercentage = Math.round((categoryIndex / totalCategories) * 100);
-  const totalSavings = displayCards.reduce((sum, card) => sum + (card.monthlySavings || 0), 0);
   const maxSavings = Math.max(...displayCards.map(card => card.monthlySavings || 0));
   const canAddMore = categoryIndex < totalCategories - 1;
 

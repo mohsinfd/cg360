@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface AnimatedTransitionProps {
   children: React.ReactNode;
-  key: string | number;
+  key?: string | number;
 }
 
 const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({ children, key }) => {

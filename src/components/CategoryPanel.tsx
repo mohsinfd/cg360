@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { CategoryKey, Payload, Eligibility } from '../types';
 import { CATEGORY_CONFIG, FIELD_CONFIG, JOURNEY_MESSAGES } from '../constants';
-import { hasCategoryData } from '../utils';
 import InputSlider from './InputSlider';
 import LoungePicker from './LoungePicker';
 import EligibilityForm from './EligibilityForm';
@@ -16,8 +15,6 @@ interface CategoryPanelProps {
   onEligibilityUpdate: (eligibility: Eligibility) => void;
   categoryIndex: number;
   hasResults: boolean;
-  onContinueToNext: () => void;
-  canContinue: boolean;
 }
 
 const CategoryPanel: React.FC<CategoryPanelProps> = ({
@@ -30,14 +27,11 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
   onEligibilityUpdate,
   categoryIndex,
   hasResults,
-  onContinueToNext,
-  canContinue,
 }) => {
   const [showEligibilityForm, setShowEligibilityForm] = useState(false);
   const [eligibilityType, setEligibilityType] = useState<'income' | 'pincode'>('income');
 
   const config = CATEGORY_CONFIG[category];
-  const hasData = hasCategoryData(payload, config.fields);
 
   // Show eligibility form after Food (index 1) and Travel (index 2)
   const shouldShowEligibility = 
@@ -120,7 +114,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
         <div className="space-y-4">
           <div className="text-center p-4 bg-purple-50 border border-purple-200 rounded-xl">
             <p className="text-purple-800 font-medium">
-              {categoryPrompt.eligibility_prompt}
+              {(categoryPrompt as any).eligibility_prompt || 'Please provide your eligibility information to continue.'}
             </p>
           </div>
           <EligibilityForm

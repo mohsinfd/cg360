@@ -21,7 +21,6 @@ const MobileResultsSheet: React.FC<MobileResultsSheetProps> = ({
   activeTab,
   onTabChange,
   isLoading = false,
-  currentCategory,
   categoryIndex = 0,
   totalCategories = 5,
   onAddMoreSpending,

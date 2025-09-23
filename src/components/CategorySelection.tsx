@@ -1,6 +1,6 @@
 import React from 'react';
 import { CategoryKey } from '../types';
-import { DEFAULT_ORDER, CATEGORY_CONFIG, JOURNEY_MESSAGES } from '../constants';
+import { DEFAULT_ORDER, CATEGORY_CONFIG } from '../constants';
 
 interface CategorySelectionProps {
   onSelect: (categories: CategoryKey[]) => void;
@@ -9,33 +9,7 @@ interface CategorySelectionProps {
 
 const CategorySelection: React.FC<CategorySelectionProps> = ({
   onSelect,
-  selectedCategories,
 }) => {
-  const handleCategoryToggle = (category: CategoryKey) => {
-    const newSelection = selectedCategories.includes(category)
-      ? selectedCategories.filter(c => c !== category)
-      : [...selectedCategories, category];
-    
-    onSelect(newSelection);
-  };
-
-  const handleSkip = () => {
-    onSelect([]); // Empty array triggers default order
-  };
-
-  const handleContinue = () => {
-    console.log('=== CONTINUE ANALYSIS FROM CATEGORY SELECTION ===');
-    console.log('Selected categories:', selectedCategories);
-    
-    if (selectedCategories.length === 0) {
-      console.log('No categories selected, using default order');
-      onSelect([]); // Use default order
-    } else {
-      console.log('Categories selected, proceeding with selection');
-      onSelect(selectedCategories);
-    }
-  };
-
   const handleStartWithCategory = (category: CategoryKey) => {
     console.log('=== STARTING WITH SPECIFIC CATEGORY ===');
     console.log('Starting category:', category);
@@ -58,7 +32,7 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({
 
       {/* Compact Category Grid */}
       <div className="grid grid-cols-2 gap-3 mb-6">
-        {DEFAULT_ORDER.map((category, index) => (
+        {DEFAULT_ORDER.map((category) => (
           <button
             key={category}
             onClick={() => handleStartWithCategory(category)}
@@ -78,7 +52,7 @@ const CategorySelection: React.FC<CategorySelectionProps> = ({
 
       {/* Simple CTA */}
       <button
-        onClick={handleSkip}
+        onClick={() => onSelect([])}
         className="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors duration-200"
       >
         Use Default Order

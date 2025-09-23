@@ -1,4 +1,4 @@
-import { Payload, Eligibility, CardResult } from '../types';
+import { Payload, CardResult } from '../types';
 
 // API Configuration
 const RECOMMENDATION_API_URL = 'https://card-recommendation-api-v2.bankkaro.com/cg/api/pro';
@@ -184,7 +184,7 @@ function generateMockCards(): CardResult[] {
       tags: ['Amazon', 'Cashback'],
       eligible: false,
       overallRank: 3,
-      eligibleRank: null,
+      eligibleRank: undefined,
       keyPerks: ['5% on Amazon', '2% on other']
     },
     {

@@ -1,13 +1,12 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { CG360State, CategoryKey, Payload, Eligibility } from '../types';
-import { DEFAULT_PAYLOAD, DEFAULT_ORDER, UPDATE_COPY, NUDGE_COPY, CATEGORY_CONFIG } from '../constants';
+import { DEFAULT_PAYLOAD, DEFAULT_ORDER, UPDATE_COPY, NUDGE_COPY } from '../constants';
 import { calculateAccuracy } from '../utils';
 import { fetchRecommendations } from '../api';
 import CategorySelection from './CategorySelection';
 import CategoryPanel from './CategoryPanel';
 import ResultsPreview from './ResultsPreview';
 import SimpleMobileResultsSheet from './SimpleMobileResultsSheet';
-import AccuracyMeter from './AccuracyMeter';
 import UpdateBanner from './UpdateBanner';
 import NudgeBanner from './NudgeBanner';
 import AnimatedTransition from './AnimatedTransition';
@@ -77,8 +76,8 @@ const CardGenius360: React.FC = () => {
       console.log('Overall cards:', overallCards.length);
 
       // Update banners
-      const updateText = UPDATE_COPY[category];
-      const nudgeText = state.idx < order.length - 1 ? NUDGE_COPY[category] : undefined;
+      const updateText = UPDATE_COPY[category as keyof typeof UPDATE_COPY];
+      const nudgeText = state.idx < order.length - 1 ? NUDGE_COPY[category as keyof typeof NUDGE_COPY] : undefined;
       
       console.log('About to update state with results:', { overall: overallCards.length, eligible: eligibleCards.length });
       
@@ -87,7 +86,7 @@ const CardGenius360: React.FC = () => {
           ...prev,
           results: { overall: overallCards, eligible: eligibleCards },
           banners: { update: updateText, nudge: nudgeText },
-          activeTab: eligibleCards.length > 0 ? 'eligible' : 'all',
+          activeTab: (eligibleCards.length > 0 ? 'eligible' : 'all') as 'eligible' | 'all',
           isLoading: false,
         };
         console.log('New state after update:', newState);
@@ -186,10 +185,6 @@ const CardGenius360: React.FC = () => {
                     onEligibilityUpdate={handleEligibilityUpdate}
                     categoryIndex={state.idx}
                     hasResults={state.results.overall.length > 0}
-                    onContinueToNext={() => {
-                      // This is no longer used - we use handleComplete directly
-                    }}
-                    canContinue={state.idx < order.length - 1}
                   />
                 </AnimatedTransition>
               )}

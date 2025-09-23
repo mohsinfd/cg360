@@ -2,7 +2,6 @@ import { Payload, Eligibility } from '../types';
 
 // Non-linear slider mapping (ui 0..100 → ₹0..max)
 export function uiToValue(ui: number, max = 200000): number {
-  const min = 0;
   const logMax = Math.log10(max + 1);
   const v = Math.pow(10, (ui / 100) * logMax) - 1;
   return Math.round(v);

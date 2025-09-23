@@ -74,10 +74,10 @@ export interface CategoryConfig {
   weight: number;
 }
 
-export interface UpdateCopy {
+export type UpdateCopy = {
   [K in CategoryKey]: string;
-}
+};
 
-export interface NudgeCopy {
+export type NudgeCopy = {
   [K in CategoryKey]: string;
-}
+};

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CardResult, Payload } from '../types';
 import { formatCurrency } from '../utils';
-import { JOURNEY_MESSAGES } from '../constants';
 
 interface SimpleMobileResultsSheetProps {
   overallCards: CardResult[];
@@ -20,7 +19,6 @@ const SimpleMobileResultsSheet: React.FC<SimpleMobileResultsSheetProps> = ({
   eligibleCards,
   activeTab,
   onTabChange,
-  currentCategory,
   categoryIndex = 0,
   totalCategories = 5,
   onAddMoreSpending,
@@ -30,8 +28,6 @@ const SimpleMobileResultsSheet: React.FC<SimpleMobileResultsSheetProps> = ({
   const [showAllCards, setShowAllCards] = useState(false);
 
   const displayCards = activeTab === 'eligible' ? eligibleCards : overallCards;
-  const progressPercentage = Math.round((categoryIndex / totalCategories) * 100);
-  const maxSavings = Math.max(...displayCards.map(card => card.monthlySavings || 0));
 
   // Check if user has input any spending data
   const hasSpendingData = payload ? Object.values(payload).some(value => value > 0) : false;
@@ -136,7 +132,7 @@ const SimpleMobileResultsSheet: React.FC<SimpleMobileResultsSheetProps> = ({
             <div className="px-4 py-4">
               {displayCards.length > 0 ? (
                 <div className="space-y-3">
-                  {(showAllCards ? displayCards : displayCards.slice(0, 3)).map((card, index) => (
+                  {(showAllCards ? displayCards : displayCards.slice(0, 3)).map((card) => (
                     <div
                       key={card.id}
                       className="bg-white border border-gray-200 rounded-lg p-3"
