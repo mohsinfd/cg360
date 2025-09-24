@@ -17,6 +17,7 @@ interface CategoryPanelProps {
   onEligibilityUpdate: (eligibility: Eligibility) => void;
   categoryIndex: number;
   hasResults: boolean;
+  overallCards?: any[]; // Add overallCards prop
 }
 
 const CategoryPanel: React.FC<CategoryPanelProps> = ({
@@ -29,6 +30,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
   onEligibilityUpdate,
   categoryIndex,
   hasResults,
+  overallCards,
 }) => {
   const [showEligibilityForm, setShowEligibilityForm] = useState(false);
   const [eligibilityType, setEligibilityType] = useState<'income' | 'pincode'>('income');
@@ -183,19 +185,45 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
                 Skip This Category
               </button>
               
-              {/* Floating Primary CTA - Show when no results OR when current category has no data */}
-              {(!hasResults || !hasCurrentCategoryData) && (
-                <div className="fixed bottom-6 left-4 right-4 z-50">
+              {/* Floating CTAs - Side by side when results exist, single when no results */}
+              <div className="fixed bottom-6 left-4 right-4 z-50">
+                {hasResults ? (
+                  /* Side-by-side CTAs when results exist */
+                  <div className="flex gap-3">
+                    {/* Secondary: View Results */}
+                    <button
+                      onClick={() => {
+                        // Open the SimpleMobileResultsSheet
+                        const event = new CustomEvent('openResultsSheet');
+                        window.dispatchEvent(event);
+                      }}
+                      className="flex-1 bg-white border-2 border-blue-600 text-blue-600 py-4 px-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <span className="text-xl">💳</span>
+                      <span>View {overallCards?.length || 0} Cards</span>
+                    </button>
+                    
+                    {/* Primary: Update Recommendations */}
+                    <button
+                      onClick={handleComplete}
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <span className="text-xl">🔄</span>
+                      <span>Update</span>
+                    </button>
+                  </div>
+                ) : (
+                  /* Single CTA when no results */
                   <button
                     onClick={handleComplete}
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     <span className="text-xl">💳</span>
-                    <span>{hasResults ? 'Update Recommendations' : 'Get Recommendations'}</span>
+                    <span>Get Recommendations</span>
                     <span className="text-sm opacity-80">→</span>
                   </button>
-                </div>
-              )}
+                )}
+              </div>
               
               {/* Spacer to prevent content overlap */}
               <div className="h-20"></div>

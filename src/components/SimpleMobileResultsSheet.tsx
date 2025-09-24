@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CardResult, Payload } from '../types';
 import { formatCurrency } from '../utils';
 
@@ -12,6 +12,7 @@ interface SimpleMobileResultsSheetProps {
   totalCategories?: number;
   onAddMoreSpending?: () => void;
   payload?: Payload; // Add payload to check for any spending data
+  hideFloatingButton?: boolean; // Add prop to hide floating button when CategoryPanel shows both CTAs
 }
 
 const SimpleMobileResultsSheet: React.FC<SimpleMobileResultsSheetProps> = ({
@@ -23,11 +24,22 @@ const SimpleMobileResultsSheet: React.FC<SimpleMobileResultsSheetProps> = ({
   totalCategories = 5,
   onAddMoreSpending,
   payload,
+  hideFloatingButton = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showAllCards, setShowAllCards] = useState(false);
 
   const displayCards = activeTab === 'eligible' ? eligibleCards : overallCards;
+
+  // Listen for custom event from CategoryPanel "View Results" button
+  useEffect(() => {
+    const handleOpenResultsSheet = () => {
+      setIsOpen(true);
+    };
+
+    window.addEventListener('openResultsSheet', handleOpenResultsSheet);
+    return () => window.removeEventListener('openResultsSheet', handleOpenResultsSheet);
+  }, []);
 
   // Check if user has input any spending data
   const hasSpendingData = payload ? Object.values(payload).some(value => value > 0) : false;
@@ -64,8 +76,8 @@ const SimpleMobileResultsSheet: React.FC<SimpleMobileResultsSheetProps> = ({
         Mobile: {overallCards.length} cards | Button: {overallCards.length > 0 ? 'SHOWING' : 'HIDDEN'} | canAddMore: {canAddMore ? 'YES' : 'NO'}
       </div>
 
-      {/* Mobile Floating Button - Always show when there are results */}
-      {overallCards.length > 0 && (
+      {/* Mobile Floating Button - Show when there are results and not hidden */}
+      {overallCards.length > 0 && !hideFloatingButton && (
         <div className="fixed bottom-4 left-4 right-4 z-50 lg:hidden">
           <button
             onClick={openSheet}

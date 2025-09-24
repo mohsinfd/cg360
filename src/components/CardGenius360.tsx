@@ -184,6 +184,7 @@ const CardGenius360: React.FC = () => {
                     onEligibilityUpdate={handleEligibilityUpdate}
                     categoryIndex={state.idx}
                     hasResults={state.results.overall.length > 0}
+                    overallCards={state.results.overall}
                   />
                 </AnimatedTransition>
               )}
@@ -225,6 +226,7 @@ const CardGenius360: React.FC = () => {
                   }
                 }}
                 payload={state.payload}
+                hideFloatingButton={state.results.overall.length > 0} // Hide when CategoryPanel shows both CTAs
               />
 
               {/* Desktop Results - Completely Hidden on Mobile */}
