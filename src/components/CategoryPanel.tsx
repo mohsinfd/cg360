@@ -100,6 +100,19 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
 
   const categoryPrompt = JOURNEY_MESSAGES.category_prompts[category];
   
+  // Debug logging for CTA visibility
+  const hasCurrentCategoryData = hasCategoryData(payload, config.fields);
+  const shouldShowFloatingCTA = !hasCurrentCategoryData; // Show when current category has no data
+  
+  console.log('=== CATEGORY PANEL DEBUG ===');
+  console.log('Category:', category);
+  console.log('Category index:', categoryIndex);
+  console.log('Has results:', hasResults);
+  console.log('Has current category data:', hasCurrentCategoryData);
+  console.log('Should show floating CTA:', shouldShowFloatingCTA);
+  console.log('Payload for this category:', payload);
+  console.log('Config fields:', config.fields);
+  
   return (
     <div className="space-y-6 pt-20">
       <div className="text-center">
@@ -173,7 +186,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
               </button>
               
               {/* Floating Primary CTA - Show when no results OR when current category needs data */}
-              {(!hasResults || !hasCategoryData(payload, config.fields)) && (
+              {shouldShowFloatingCTA && (
                 <div className="fixed bottom-6 left-4 right-4 z-50">
                   <button
                     onClick={handleComplete}
