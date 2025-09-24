@@ -4,6 +4,7 @@ import { CATEGORY_CONFIG, FIELD_CONFIG, JOURNEY_MESSAGES } from '../constants';
 import InputSlider from './InputSlider';
 import LoungePicker from './LoungePicker';
 import EligibilityForm from './EligibilityForm';
+import CarouselToast from './CarouselToast';
 
 interface CategoryPanelProps {
   category: CategoryKey;
@@ -99,7 +100,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
   const categoryPrompt = JOURNEY_MESSAGES.category_prompts[category];
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-20">
       <div className="text-center">
         <h2 className="text-2xl font-semibold text-gray-900 mb-3">
           {categoryPrompt.title}
@@ -133,81 +134,60 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
             {config.fields.map(renderField)}
           </div>
 
-          {/* Consolidated Progressive Banner */}
-          <div className="space-y-4">
-            {/* Single Progressive Message */}
-            <div className="text-center p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-blue-600">🎯</span>
-                <p className="text-blue-800 font-semibold">
-                  {categoryIndex === 0 ? 'Building Your Profile' :
-                   categoryIndex < 3 ? 'Profile Progress' :
-                   'Almost Complete!'}
-                </p>
-              </div>
-              
-              {/* Dynamic Progress Message */}
-              <p className="text-blue-700 text-sm mb-2">
-                {hasResults ? 
-                  `✅ ${categoryIndex === 0 ? 'Shopping' : 'Previous categories'} analyzed. ${categoryPrompt.fields_intro}` :
-                  categoryPrompt.fields_intro
-                }
-              </p>
-              
-              {/* Next Action Hint */}
-              {hasResults && (
-                <p className="text-purple-600 text-xs font-medium">
-                  💡 Add {config.label.toLowerCase()} to unlock more insights
-                </p>
-              )}
-            </div>
+          {/* Carousel Toast Messages */}
+          <CarouselToast 
+            messages={[
+              {
+                id: 'profile-building',
+                icon: '🎯',
+                title: categoryIndex === 0 ? 'Building Your Profile' : 'Profile Progress',
+                message: categoryPrompt.fields_intro,
+                color: 'blue' as const
+              },
+              ...(hasResults ? [{
+                id: 'previous-analysis',
+                icon: '✅',
+                title: 'Analysis Complete',
+                message: `${categoryIndex === 0 ? 'Shopping' : 'Previous categories'} analyzed successfully`,
+                color: 'green' as const
+              }] : []),
+              ...(hasResults ? [{
+                id: 'next-insights',
+                icon: '💡',
+                title: 'Unlock More Insights',
+                message: `Add ${config.label.toLowerCase()} to unlock more insights`,
+                color: 'purple' as const
+              }] : [])
+            ]}
+          />
             
-            {/* Simplified CTA Design */}
-            {categoryIndex === 0 ? (
-              <div className="space-y-4">
-                {/* Secondary Skip Button */}
-                <button
-                  onClick={onSkip}
-                  className="w-full bg-gray-100 text-gray-600 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors duration-200"
-                >
-                  Skip This Category
-                </button>
-                
-                {/* Floating Primary CTA - Only show when no results yet */}
-                {!hasResults && (
-                  <div className="fixed bottom-6 left-4 right-4 z-50">
-                    <button
-                      onClick={handleComplete}
-                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
-                    >
-                      <span className="text-xl">💳</span>
-                      <span>Get Recommendations</span>
-                      <span className="text-sm opacity-80">→</span>
-                    </button>
-                  </div>
-                )}
-                
-                {/* Spacer to prevent content overlap */}
-                <div className="h-20"></div>
-              </div>
-            ) : (
-              /* Other Categories: Standard Layout */
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={onSkip}
-                  className="flex-1 btn-secondary"
-                >
-                  Skip This Category
-                </button>
-                <button
-                  onClick={handleComplete}
-                  className="flex-1 btn-primary"
-                >
-                  {hasResults ? 'Continue Analysis' : 'Get Recommendations'}
-                </button>
-              </div>
-            )}
-          </div>
+            {/* Universal CTA Design - No Conflicting Buttons */}
+            <div className="space-y-4">
+              {/* Secondary Skip Button - Always Available */}
+              <button
+                onClick={onSkip}
+                className="w-full bg-gray-100 text-gray-600 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors duration-200"
+              >
+                Skip This Category
+              </button>
+              
+              {/* Floating Primary CTA - Only show when no results yet */}
+              {!hasResults && (
+                <div className="fixed bottom-6 left-4 right-4 z-50">
+                  <button
+                    onClick={handleComplete}
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+                  >
+                    <span className="text-xl">💳</span>
+                    <span>Get Recommendations</span>
+                    <span className="text-sm opacity-80">→</span>
+                  </button>
+                </div>
+              )}
+              
+              {/* Spacer to prevent content overlap */}
+              <div className="h-20"></div>
+            </div>
         </>
       )}
     </div>
