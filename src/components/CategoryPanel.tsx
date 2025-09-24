@@ -160,20 +160,52 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
               </div>
             )}
             
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={onSkip}
-                className="flex-1 btn-secondary"
-              >
-                Skip This Category
-              </button>
-              <button
-                onClick={handleComplete}
-                className="flex-1 btn-primary"
-              >
-                {hasResults ? 'View Results' : 'Get Recommendations'}
-              </button>
-            </div>
+            {/* First Category: Floating CTA Design */}
+            {categoryIndex === 0 ? (
+              <div className="space-y-4">
+                {/* Secondary Skip Button */}
+                <button
+                  onClick={onSkip}
+                  className="w-full bg-gray-100 text-gray-600 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors duration-200"
+                >
+                  Skip This Category
+                </button>
+                
+                {/* Floating Primary CTA */}
+                <div className="fixed bottom-6 left-4 right-4 z-50">
+                  <button
+                    onClick={handleComplete}
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 animate-pulse"
+                    style={{
+                      animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    }}
+                  >
+                    <span className="text-xl">💳</span>
+                    <span>{hasResults ? 'View Results' : 'Get Recommendations'}</span>
+                    <span className="text-sm opacity-80">→</span>
+                  </button>
+                </div>
+                
+                {/* Spacer to prevent content overlap */}
+                <div className="h-20"></div>
+              </div>
+            ) : (
+              /* Other Categories: Standard Layout */
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={onSkip}
+                  className="flex-1 btn-secondary"
+                >
+                  Skip This Category
+                </button>
+                <button
+                  onClick={handleComplete}
+                  className="flex-1 btn-primary"
+                >
+                  {hasResults ? 'View Results' : 'Get Recommendations'}
+                </button>
+              </div>
+            )}
           </div>
         </>
       )}
