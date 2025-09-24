@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CategoryKey, Payload, Eligibility } from '../types';
 import { CATEGORY_CONFIG, FIELD_CONFIG, JOURNEY_MESSAGES } from '../constants';
+import { hasCategoryData } from '../utils';
 import InputSlider from './InputSlider';
 import LoungePicker from './LoungePicker';
 import EligibilityForm from './EligibilityForm';
@@ -171,15 +172,15 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
                 Skip This Category
               </button>
               
-              {/* Floating Primary CTA - Only show when no results yet */}
-              {!hasResults && (
+              {/* Floating Primary CTA - Show when no results OR when current category needs data */}
+              {(!hasResults || !hasCategoryData(payload, config.fields)) && (
                 <div className="fixed bottom-6 left-4 right-4 z-50">
                   <button
                     onClick={handleComplete}
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     <span className="text-xl">💳</span>
-                    <span>Get Recommendations</span>
+                    <span>{hasResults ? 'Update Recommendations' : 'Get Recommendations'}</span>
                     <span className="text-sm opacity-80">→</span>
                   </button>
                 </div>
