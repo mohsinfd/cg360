@@ -76,7 +76,10 @@ const CardGenius360: React.FC = () => {
 
       // Update banners
       const updateText = UPDATE_COPY[category as keyof typeof UPDATE_COPY];
-      const nudgeText = state.idx < order.length - 1 ? NUDGE_COPY[category as keyof typeof NUDGE_COPY] : undefined;
+      // Nudge text should be about the NEXT category, not current
+      const nextCategoryIndex = state.idx + 1;
+      const nextCategory = nextCategoryIndex < order.length ? order[nextCategoryIndex] : null;
+      const nudgeText = nextCategory ? NUDGE_COPY[nextCategory as keyof typeof NUDGE_COPY] : undefined;
       
       console.log('About to update state with results:', { overall: overallCards.length, eligible: eligibleCards.length });
       

@@ -33,7 +33,6 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
   overallCards,
 }) => {
   const [showEligibilityForm, setShowEligibilityForm] = useState(false);
-  const [eligibilityType, setEligibilityType] = useState<'income' | 'pincode'>('income');
 
   const config = CATEGORY_CONFIG[category];
 
@@ -66,7 +65,6 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
     
     if (shouldShowEligibility && !showEligibilityForm) {
       console.log('Showing eligibility form');
-      setEligibilityType(categoryIndex === 1 ? 'income' : 'pincode');
       setShowEligibilityForm(true);
     } else {
       console.log('Calling onComplete');
@@ -102,6 +100,18 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
 
   const categoryPrompt = JOURNEY_MESSAGES.category_prompts[category];
   
+  // Function to get category-specific insights
+  const getCategorySpecificInsights = (category: CategoryKey): string => {
+    const insights = {
+      shopping: 'shopping rewards',
+      food: 'restaurant rewards',
+      travel: 'travel benefits',
+      bills: 'utility bill rewards',
+      rent_insurance: 'rent & insurance benefits'
+    };
+    return insights[category] || 'more benefits';
+  };
+  
   // Debug logging for CTA visibility
   const hasCurrentCategoryData = hasCategoryData(payload, config.fields);
   
@@ -136,7 +146,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
             onSubmit={handleEligibilitySubmit}
             onCancel={handleEligibilityCancel}
             initialData={eligibility}
-            showPincode={eligibilityType === 'pincode'}
+            showPincode={true} // Always show pincode for eligibility API
           />
         </div>
       )}
@@ -169,7 +179,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
                 id: 'next-insights',
                 icon: '💡',
                 title: 'Unlock More Insights',
-                message: `Add ${config.label.toLowerCase()} to unlock more insights`,
+                message: `Add ${config.label.toLowerCase()} to unlock ${getCategorySpecificInsights(category)}`,
                 color: 'purple' as const
               }] : [])
             ]}
