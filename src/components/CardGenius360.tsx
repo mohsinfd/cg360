@@ -7,7 +7,6 @@ import CategorySelection from './CategorySelection';
 import CategoryPanel from './CategoryPanel';
 import ResultsPreview from './ResultsPreview';
 import SimpleMobileResultsSheet from './SimpleMobileResultsSheet';
-import UpdateBanner from './UpdateBanner';
 import NudgeBanner from './NudgeBanner';
 import AnimatedTransition from './AnimatedTransition';
 
@@ -189,15 +188,10 @@ const CardGenius360: React.FC = () => {
                 </AnimatedTransition>
               )}
 
-              {/* Banners */}
-              {(state.banners.update || state.banners.nudge) && (
-                <div className="space-y-4">
-                  {state.banners.update && (
-                    <UpdateBanner text={state.banners.update} />
-                  )}
-                  {state.banners.nudge && (
-                    <NudgeBanner text={state.banners.nudge} />
-                  )}
+              {/* Subtle Progress Banners - Only show nudge, not update */}
+              {state.banners.nudge && (
+                <div className="px-4">
+                  <NudgeBanner text={state.banners.nudge} />
                 </div>
               )}
 

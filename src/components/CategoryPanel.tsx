@@ -133,34 +133,36 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
             {config.fields.map(renderField)}
           </div>
 
-          {/* Contextual messaging */}
+          {/* Consolidated Progressive Banner */}
           <div className="space-y-4">
-            {hasResults && (
-              <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                <p className="text-blue-800 font-medium mb-2">
-                  {categoryIndex === 0 ? JOURNEY_MESSAGES.progress.first_category :
-                   categoryIndex < 3 ? JOURNEY_MESSAGES.progress.mid_journey :
-                   JOURNEY_MESSAGES.progress.near_complete}
-                </p>
-                <p className="text-blue-600 text-sm">
-                  {categoryPrompt.fields_intro}
+            {/* Single Progressive Message */}
+            <div className="text-center p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-blue-600">🎯</span>
+                <p className="text-blue-800 font-semibold">
+                  {categoryIndex === 0 ? 'Building Your Profile' :
+                   categoryIndex < 3 ? 'Profile Progress' :
+                   'Almost Complete!'}
                 </p>
               </div>
-            )}
+              
+              {/* Dynamic Progress Message */}
+              <p className="text-blue-700 text-sm mb-2">
+                {hasResults ? 
+                  `✅ ${categoryIndex === 0 ? 'Shopping' : 'Previous categories'} analyzed. ${categoryPrompt.fields_intro}` :
+                  categoryPrompt.fields_intro
+                }
+              </p>
+              
+              {/* Next Action Hint */}
+              {hasResults && (
+                <p className="text-purple-600 text-xs font-medium">
+                  💡 Add {config.label.toLowerCase()} to unlock more insights
+                </p>
+              )}
+            </div>
             
-            {/* Results Available Indicator */}
-            {hasResults && (
-              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <span className="text-green-600">✅</span>
-                  <span className="text-green-800 text-sm font-medium">
-                    Recommendations ready! Check the floating button below.
-                  </span>
-                </div>
-              </div>
-            )}
-            
-            {/* First Category: Floating CTA Design */}
+            {/* Simplified CTA Design */}
             {categoryIndex === 0 ? (
               <div className="space-y-4">
                 {/* Secondary Skip Button */}
@@ -171,20 +173,19 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
                   Skip This Category
                 </button>
                 
-                {/* Floating Primary CTA */}
-                <div className="fixed bottom-6 left-4 right-4 z-50">
-                  <button
-                    onClick={handleComplete}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 animate-pulse"
-                    style={{
-                      animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-                    }}
-                  >
-                    <span className="text-xl">💳</span>
-                    <span>{hasResults ? 'View Results' : 'Get Recommendations'}</span>
-                    <span className="text-sm opacity-80">→</span>
-                  </button>
-                </div>
+                {/* Floating Primary CTA - Only show when no results yet */}
+                {!hasResults && (
+                  <div className="fixed bottom-6 left-4 right-4 z-50">
+                    <button
+                      onClick={handleComplete}
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <span className="text-xl">💳</span>
+                      <span>Get Recommendations</span>
+                      <span className="text-sm opacity-80">→</span>
+                    </button>
+                  </div>
+                )}
                 
                 {/* Spacer to prevent content overlap */}
                 <div className="h-20"></div>
@@ -202,7 +203,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
                   onClick={handleComplete}
                   className="flex-1 btn-primary"
                 >
-                  {hasResults ? 'View Results' : 'Get Recommendations'}
+                  {hasResults ? 'Continue Analysis' : 'Get Recommendations'}
                 </button>
               </div>
             )}
