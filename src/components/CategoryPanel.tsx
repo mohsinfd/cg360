@@ -102,7 +102,7 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
   
   // Debug logging for CTA visibility
   const hasCurrentCategoryData = hasCategoryData(payload, config.fields);
-  const shouldShowFloatingCTA = !hasCurrentCategoryData; // Show when current category has no data
+  const shouldShowFloatingCTA = !hasCurrentCategoryData || (hasCurrentCategoryData && !hasResults); // Show when no data OR (has data but no results)
   
   console.log('=== CATEGORY PANEL DEBUG ===');
   console.log('Category:', category);
@@ -110,8 +110,11 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
   console.log('Has results:', hasResults);
   console.log('Has current category data:', hasCurrentCategoryData);
   console.log('Should show floating CTA:', shouldShowFloatingCTA);
-  console.log('Payload for this category:', payload);
-  console.log('Config fields:', config.fields);
+  console.log('Logic: !hasCurrentCategoryData || (hasCurrentCategoryData && !hasResults)');
+  console.log('Logic breakdown:', {
+    '!hasCurrentCategoryData': !hasCurrentCategoryData,
+    'hasCurrentCategoryData && !hasResults': hasCurrentCategoryData && !hasResults
+  });
   
   return (
     <div className="space-y-6 pt-20">
