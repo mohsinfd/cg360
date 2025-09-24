@@ -102,19 +102,13 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
   
   // Debug logging for CTA visibility
   const hasCurrentCategoryData = hasCategoryData(payload, config.fields);
-  const shouldShowFloatingCTA = !hasCurrentCategoryData || (hasCurrentCategoryData && !hasResults); // Show when no data OR (has data but no results)
   
   console.log('=== CATEGORY PANEL DEBUG ===');
   console.log('Category:', category);
   console.log('Category index:', categoryIndex);
   console.log('Has results:', hasResults);
   console.log('Has current category data:', hasCurrentCategoryData);
-  console.log('Should show floating CTA:', shouldShowFloatingCTA);
-  console.log('Logic: !hasCurrentCategoryData || (hasCurrentCategoryData && !hasResults)');
-  console.log('Logic breakdown:', {
-    '!hasCurrentCategoryData': !hasCurrentCategoryData,
-    'hasCurrentCategoryData && !hasResults': hasCurrentCategoryData && !hasResults
-  });
+  console.log('Button text will be:', hasResults ? 'Update Recommendations' : 'Get Recommendations');
   
   return (
     <div className="space-y-6 pt-20">
@@ -188,19 +182,17 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
                 Skip This Category
               </button>
               
-              {/* Floating Primary CTA - Show when no results OR when current category needs data */}
-              {shouldShowFloatingCTA && (
-                <div className="fixed bottom-6 left-4 right-4 z-50">
-                  <button
-                    onClick={handleComplete}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
-                  >
-                    <span className="text-xl">💳</span>
-                    <span>{hasResults ? 'Update Recommendations' : 'Get Recommendations'}</span>
-                    <span className="text-sm opacity-80">→</span>
-                  </button>
-                </div>
-              )}
+              {/* Floating Primary CTA - Always visible on category input screens */}
+              <div className="fixed bottom-6 left-4 right-4 z-50">
+                <button
+                  onClick={handleComplete}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <span className="text-xl">💳</span>
+                  <span>{hasResults ? 'Update Recommendations' : 'Get Recommendations'}</span>
+                  <span className="text-sm opacity-80">→</span>
+                </button>
+              </div>
               
               {/* Spacer to prevent content overlap */}
               <div className="h-20"></div>
