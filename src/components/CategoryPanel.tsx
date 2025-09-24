@@ -146,7 +146,6 @@ const CategoryPanel: React.FC<CategoryPanelProps> = ({
             onSubmit={handleEligibilitySubmit}
             onCancel={handleEligibilityCancel}
             initialData={eligibility}
-            showPincode={true} // Always show pincode for eligibility API
           />
         </div>
       )}
